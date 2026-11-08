@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; font-src 'self'; script-src 'self'">
+	<title>ArtificiaI</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="app">
+		<aside class="side">
+			<div class="brand"><img src="assets/artificiai-mark.svg" alt=""><span>ArtificiaI</span></div>
+			<nav aria-label="Main navigation">
+				<button class="nav active" data-page="home">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg><span>Home</span>
+				</button>
+				<button class="nav" data-page="mods">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v4m6-4v4M9 17v4m6-4v4M3 9h4m10 0h4M3 15h4m10 0h4M7 7h10v10H7z"/></svg><span>Mods</span><i id="modsBadge" class="nav-badge" hidden>0</i>
+				</button>
+				<button class="nav" data-page="versions">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16M7 3v4m10 3v4M9 17v4"/></svg><span>Versions</span>
+				</button>
+			</nav>
+			<div class="side-bottom">
+				<button class="nav" data-page="settings">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8 3.5-.1-1.2 1.5-1.2-1.5-2.6-1.8.7a7.4 7.4 0 0 0-1.1-.6l-.3-1.9h-3l-.3 1.9a7.4 7.4 0 0 0-1.1.6l-1.8-.7L10 9.6l1.5 1.2a7.6 7.6 0 0 0 0 2L10 14l1.5 2.6 1.8-.7c.3.2.7.4 1.1.6l.3 1.9h3l.3-1.9c.4-.2.8-.4 1.1-.6l1.8.7 1.5-2.6-1.5-1.2.1-.8Z" transform="translate(-2 -2)"/></svg><span>Customization</span>
+				</button>
+				<div class="acct-wrap">
+					<button id="acct" class="acct">
+						<img id="acctImg" alt="" hidden>
+						<span class="acct-copy"><b id="acctName">Not logged in</b><small id="acctState">Click to sign in</small></span>
+						<i id="accountDot" class="online-dot offline"></i>
+					</button>
+					<div id="acctMenu" class="menu account-menu" hidden><button id="acctAction">Log in with Microsoft</button></div>
+				</div>
+			</div>
+		</aside>
+
+		<div class="main">
+			<header class="titlebar">
+				<div><h1 id="greeting">Hey, player</h1><p id="greetingSub">Ready to play?</p></div>
+				<div class="right">
+					<button class="quick-settings" data-page="settings" title="Appearance settings" aria-label="Appearance settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></button>
+					<div class="winbtns"><button data-win="min" title="Minimize">&#8211;</button><button data-win="max" title="Maximize">&#9633;</button><button data-win="close" class="x" title="Close">&#10005;</button></div>
+				</div>
+			</header>
+
+			<section id="page-home" class="page home-page">
+				<div class="home-hero">
+					<div class="hero-copy">
+						<div class="ready-label"><i></i><span id="heroStatus">READY TO PLAY</span></div>
+						<h2>Minecraft<br><strong id="heroVersion">1.21.11</strong></h2>
+						<p id="heroProfile">ArtificiaI Client · Fabric</p>
+						<div class="hero-actions">
+							<button id="launch" class="launch"><span class="play-icon">▶</span><span id="launchText">Play</span></button>
+							<div class="launchwrap"><button id="launchMore" class="more" title="More launch options">···</button><div id="launchMenu" class="menu up" hidden><button data-act="game">Open game folder</button><button data-act="mods">Open mods folder</button><button data-act="client">Open client folder</button></div></div>
+						</div>
+					</div>
+					<div class="hero-art" aria-hidden="true">
+						<div class="sun"></div><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div>
+						<div class="island island-back"></div><div class="tree"><i></i><b></b></div>
+						<div class="island island-main"></div><div class="island island-left"></div><div class="island island-right"></div>
+					</div>
+				</div>
+
+				<div class="quick-head"><div><h2>Quick access</h2><p>Set up another Minecraft version</p></div><button id="viewVersions" class="text-button">View all <span>›</span></button></div>
+				<button id="createProfile" class="new-install">
+					<span class="plus-box">＋</span><b>New installation</b><small>Configure a clean profile</small>
+				</button>
+				<div class="home-status"><span class="status-light"></span><span id="launchSub">READY</span><i></i><span id="homeProfileMeta">FABRIC · 1.21.11</span><i></i><span id="homeModsCount">0 MODS</span></div>
+			</section>
+
+			<section id="page-versions" class="page" hidden>
+				<div class="page-intro"><div><span class="eyebrow">INSTALLATIONS</span><h1>Versions</h1><p>Each profile has a separate game folder, worlds, and mod list.</p></div><button id="createProfileVersions" class="ghost create-button"><span>＋</span> New installation</button></div>
+				<div id="profiles" class="profiles"></div>
+			</section>
+
+			<section id="page-mods" class="page" hidden>
+				<div class="mods-heading"><div><span class="eyebrow">MOD LIBRARY</span><h1 id="modsHeading">Mods</h1></div><span id="modsProfileChip" class="chip dim">SELECT A PROFILE</span></div>
+				<div class="searchrow"><input id="search" type="text" placeholder="Search Fabric mods..." autocomplete="off"><span class="chip">MODRINTH</span><span id="modsVersionChip" class="chip dim">FABRIC · 1.21.11</span></div>
+				<p id="modsMessage" class="mods-message" hidden></p><div id="modlist" class="modlist"></div>
+			</section>
+
+			<section id="page-settings" class="page" hidden>
+				<div class="page-intro"><div><span class="eyebrow">YOUR LAUNCHER</span><h1>Customization</h1><p>Set the glass, color, and game options the way you like.</p></div></div>
+				<div class="panel appearance-panel"><div class="panel-heading"><div><h3>Frosted glass</h3><p>Adjust blur, tint, and color. The sample updates as you change them.</p></div><div class="appearance-actions"><button id="frostPreset" class="ghost">Frosted preset</button><button id="appearanceReset" class="ghost">Reset</button></div></div>
+					<div class="appearance-grid">
+						<div class="setting-block"><label for="mainColor">Main launcher color</label><div class="color-field"><input id="mainColor" type="color" value="#101310"><span>Sets the base tone across panels and surfaces</span></div></div>
+						<div class="setting-block"><label>Accent color</label><div class="swatches"><button class="swatch" data-accent="#b9e77a" aria-label="Mint accent" title="Mint"></button><button class="swatch" data-accent="#a78bfa" aria-label="Violet accent" title="Violet"></button><button class="swatch" data-accent="#73c8e8" aria-label="Ocean accent" title="Ocean"></button><button class="swatch" data-accent="#f0a36b" aria-label="Ember accent" title="Ember"></button><input id="accentPicker" type="color" value="#b9e77a" aria-label="Custom accent color"></div></div>
+						<div class="setting-block"><label for="tintColor">Window tint</label><div class="color-field"><input id="tintColor" type="color" value="#101310"><span>Choose the glass color behind the panels</span></div></div>
+						<div class="setting-block"><label for="material">Window effect</label><select id="material" class="select"><option value="acrylic">Acrylic · soft glass</option><option value="mica">Mica · calm surface</option><option value="none">None · solid</option></select><small class="helper">System effect works on Windows 11 22H2+; blur remains adjustable.</small></div>
+						<div class="setting-block"><label for="blurAmount">Background blur <span id="blurValue">18 px</span></label><input id="blurAmount" type="range" min="0" max="30" step="1" value="18"></div>
+						<div class="setting-block"><label for="windowOpacity">Glass opacity <span id="opacityValue">76%</span></label><input id="windowOpacity" type="range" min="35" max="100" step="1" value="76"><small class="helper">Lower opacity reveals more of your desktop through the glass.</small></div>
+					</div>
+					<div class="glass-preview"><div class="glass-preview-backdrop"><span class="preview-light"></span><span class="preview-shape"></span></div><div class="glass-preview-surface"><span class="preview-kicker">LIVE PREVIEW</span><b>ArtificiaI</b><small>Frosted glass · custom tint</small><i></i></div></div>
+				</div>
+				<div class="panel"><h3>Memory</h3><p><span id="ramValue">4</span> GB of RAM for the game</p><input id="ram" type="range" min="2" max="12" step="1" value="4"></div>
+				<div class="panel"><h3>Java</h3><p id="javaPath" class="mono">...</p></div>
+				<div class="panel row"><div><h3>Folders</h3><p>Your game files and mods live in their own folder.</p></div><div class="btns"><button class="ghost" data-folder="game">Open game folder</button><button class="ghost" data-folder="mods">Open mods folder</button></div></div>
+			</section>
+
+			<div id="profileModal" class="modal" hidden><div class="modal-scrim" data-close-profile></div><form id="profileForm" class="modal-card">
+				<div class="modal-heading"><div><span class="eyebrow">NEW INSTALLATION</span><h2>Create profile</h2><p>A fresh game folder, with no mods installed.</p></div><button type="button" class="modal-close" data-close-profile aria-label="Close">×</button></div>
+				<label class="field-label" for="profileName">Profile name</label><input id="profileName" class="text-field" type="text" maxlength="32" placeholder="e.g. 1.8.9 PvP" required>
+				<label class="field-label" for="profileVersion">Minecraft version</label><input id="profileVersion" class="text-field" type="text" list="releaseVersions" value="1.21.11" autocomplete="off" required><datalist id="releaseVersions"></datalist>
+				<p class="field-hint">Popular releases are suggested first; type to find any official release.</p><label class="field-label" for="profileLoader">Loader</label>
+				<select id="profileLoader" class="text-field"><option value="Vanilla">Vanilla · clean install</option><option value="Fabric">Fabric · starts with an empty mods folder</option></select>
+				<div id="profileError" class="form-error" hidden></div><div class="modal-actions"><button type="button" class="ghost" data-close-profile>Cancel</button><button id="profileSubmit" class="primary-action" type="submit">Create profile</button></div>
+			</form></div>
+		</div>
+	</div>
+	<script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+artifacts/
+Downloader/bin/
+Downloader/obj/
+Downloader/Artificiai-Downloader.exe

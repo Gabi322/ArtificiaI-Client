@@ -1,0 +1,33 @@
+{
+  "name": "artificiai-launcher",
+  "version": "0.1.0",
+  "productName": "Artificiai Launcher",
+  "description": "ArtificiaI Client launcher",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^45.2.3",
+    "minecraft-launcher-core": "^3.18.2",
+    "msmc": "^5.0.5"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "com.artificiai.client.launcher",
+    "productName": "Artificiai Launcher",
+    "asar": true,
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js", "renderer/**/*", "client/**/*", "package.json", "node_modules/**/*"],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "artifactName": "Artificiai-Launcher-Setup.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

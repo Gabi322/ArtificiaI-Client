@@ -1,0 +1,49 @@
+name: Build launcher and downloader
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install launcher packages
+        run: npm ci
+
+      - name: Build Windows launcher installer
+        run: npx --yes electron-builder@26.18.0 --win nsis --x64 --publish never
+
+      - name: Build standalone downloader
+        shell: pwsh
+        run: .\Downloader\build.ps1
+
+      - name: Create installer checksum
+        shell: pwsh
+        run: |
+          $file = 'dist/Artificiai-Launcher-Setup.exe'
+          $hash = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  Artificiai-Launcher-Setup.exe" | Set-Content -LiteralPath 'dist/SHA256SUMS.txt' -Encoding ascii
+
+      - name: Attach downloads to this release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          gh release upload "$env:GITHUB_REF_NAME" `
+            'dist/Artificiai-Launcher-Setup.exe' `
+            'dist/SHA256SUMS.txt' `
+            'Downloader/Artificiai-Downloader.exe' `
+            --clobber --repo "$env:GITHUB_REPOSITORY"
