@@ -79,6 +79,7 @@ function createWindow() {
 		width: 1100, height: 700, minWidth: 760, minHeight: 500,
 		frame: false, backgroundColor: '#101310', transparent: false,
 		resizable: true, maximizable: true,
+		icon: path.join(__dirname, 'assets', 'artificiai.ico'),
 		title: 'ArtificiaI Client',
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),

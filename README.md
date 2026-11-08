@@ -22,6 +22,8 @@ The downloader asks for the public repository as `owner/repository` and remember
 
 The launcher checks the public GitHub Releases page after startup, downloads newer versions in the background, and asks the player to restart to install. Bump `version` in both `package.json` and `package-lock.json` for every update, then publish a release using the same version in its tag. The first self-updating installer must be installed manually by existing users; versions built before updater support cannot update themselves. After that one-time update, future releases install through the launcher.
 
+The launcher and Windows executable use the A mark. Its in-app tile gradient responds to the accent and main launcher colors in Customization; the Windows executable icon uses the purple gradient from the supplied reference.
+
 The first release may show no assets while the workflow is building. Refresh the release page after the **Build launcher and downloader** workflow finishes.
 
 For future updates, upload the new source and publish another release with a new tag, such as `v0.1.1`.

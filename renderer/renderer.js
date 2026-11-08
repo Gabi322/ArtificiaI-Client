@@ -325,6 +325,11 @@ function mixHex(hex, amount, towardWhite) {
 	const target = towardWhite ? 255 : 0;
 	return '#' + channels.map((n) => Math.round(n + (target - n) * amount).toString(16).padStart(2, '0')).join('');
 }
+function blendHex(a, b, amount) {
+	const aa = [0, 2, 4].map((i) => parseInt(a.slice(i + 1, i + 3), 16));
+	const bb = [0, 2, 4].map((i) => parseInt(b.slice(i + 1, i + 3), 16));
+	return '#' + aa.map((n, i) => Math.round(n + (bb[i] - n) * amount).toString(16).padStart(2, '0')).join('');
+}
 function applyAppearance(settings) {
 	const accent = /^#[0-9a-f]{6}$/i.test(settings.accent || '') ? settings.accent : APPEARANCE_DEFAULTS.accent;
 	const mainColor = /^#[0-9a-f]{6}$/i.test(settings.mainColor || '') ? settings.mainColor : APPEARANCE_DEFAULTS.mainColor;
@@ -347,6 +352,8 @@ function applyAppearance(settings) {
 	root.style.setProperty('--accent', accent);
 	root.style.setProperty('--accent-rgb', hexRgb(accent));
 	root.style.setProperty('--accent-ink', '#182015');
+	root.style.setProperty('--logo-start', blendHex('#9477fa', accent, .28));
+	root.style.setProperty('--logo-end', blendHex('#7954e8', mainColor, .22));
 	root.style.setProperty('--window-overlay', `rgba(${hexRgb(tint)},${opacity / 100})`);
 	root.style.setProperty('--main-overlay', `rgba(${hexRgb(mainColor)},${opacity / 100})`);
 	root.style.setProperty('--glass-surface', `rgba(${hexRgb(mainColor)},${Math.min(.82, opacity / 100 * .78)})`);

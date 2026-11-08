@@ -23,11 +23,13 @@
       "main.js",
       "preload.js",
       "renderer/**/*",
+      "assets/**/*",
       "client/**/*",
       "package.json",
       "node_modules/**/*"
     ],
     "win": {
+      "icon": "assets/artificiai.ico",
       "target": [
         {
           "target": "nsis",
