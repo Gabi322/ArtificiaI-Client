@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -141,7 +142,7 @@ namespace Artificiai.Bootstrapper
 
         private async Task DownloadAndInstallAsync(Dictionary<string, object> release, bool silent)
         {
-            object[] assets = release["assets"] as object[];
+            IEnumerable assets = release.ContainsKey("assets") ? release["assets"] as IEnumerable : null;
             Dictionary<string, object> installer = null;
             Dictionary<string, object> checksums = null;
             if (assets != null)
