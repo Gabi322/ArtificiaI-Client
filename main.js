@@ -173,6 +173,42 @@ function syncClientJars(profile) {
 	return jars.length;
 }
 
+async function ensureFabricApi(mcVersion, root) {
+	const modsDir = path.join(root, 'mods');
+	fs.mkdirSync(modsDir, { recursive: true });
+	const markerFile = path.join(root, '.artificiai-fabric-api.json');
+	const managed = readJson(markerFile, { file: null });
+	const existing = fs.readdirSync(modsDir).find((name) => /^fabric-api.*\.jar$/i.test(name));
+	if (managed.file && managed.mc === mcVersion && existing === managed.file) return existing;
+	if (!managed.file && existing) {
+		writeJson(markerFile, { file: existing, mc: mcVersion });
+		return existing;
+	}
+	if (managed.file && managed.mc !== mcVersion) {
+		try { fs.unlinkSync(path.join(modsDir, managed.file)); } catch { /* old managed file is already gone */ }
+	}
+	const versions = await getJson(`https://api.modrinth.com/v2/project/P7dR8mSH/version?loaders=${enc('["fabric"]')}&game_versions=${enc(JSON.stringify([mcVersion]))}&include_changelog=false`);
+	const version = versions.find((entry) => entry.version_type === 'release') || versions[0];
+	if (!version) throw new Error(`Fabric API does not list support for Minecraft ${mcVersion}.`);
+	const file = version.files.find((entry) => entry.primary) || version.files[0];
+	if (!file?.url || !file.filename) throw new Error(`Could not find the Fabric API download for Minecraft ${mcVersion}.`);
+	if (managed.file && managed.file !== file.filename) {
+		try { fs.unlinkSync(path.join(modsDir, managed.file)); } catch { /* old managed file is already gone */ }
+	}
+	if (existing && existing !== managed.file) {
+		writeJson(markerFile, { file: existing, mc: mcVersion });
+		return existing;
+	}
+	const target = path.join(modsDir, file.filename);
+	if (!fs.existsSync(target)) {
+		const response = await fetch(file.url, { headers: { 'User-Agent': UA } });
+		if (!response.ok) throw new Error(`Fabric API download failed (${response.status}).`);
+		fs.writeFileSync(target, Buffer.from(await response.arrayBuffer()));
+	}
+	writeJson(markerFile, { file: file.filename, mc: mcVersion });
+	return file.filename;
+}
+
 async function login() {
 	const authManager = new Auth('select_account');
 	const xbox = await authManager.launch('electron');
@@ -331,6 +367,8 @@ ipcMain.handle('play', async (_e, profileId) => {
 			version.custom = await ensureFabric(profile.mc, root);
 			if (profile.id === 'aic') {
 				syncClientJars(profile);
+				send('status', `Installing Fabric API ${profile.mc}…`);
+				await ensureFabricApi(profile.mc, root);
 			} else {
 				fs.mkdirSync(profileModsDir(profile), { recursive: true });
 			}

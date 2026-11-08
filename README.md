@@ -24,6 +24,8 @@ The launcher checks the public GitHub Releases page after startup, downloads new
 
 The launcher and Windows executable use the A mark. Its in-app tile gradient responds to the accent and main launcher colors in Customization; the Windows executable icon uses the purple gradient from the supplied reference.
 
+The built-in ArtificiaI Client profile uses Fabric. On first play it copies the bundled ArtificiaI client JAR into that profile and installs the matching Fabric API dependency, which the client needs for its Right Shift menu. User-created profiles remain fresh and do not receive the client mod automatically.
+
 The first release may show no assets while the workflow is building. Refresh the release page after the **Build launcher and downloader** workflow finishes.
 
 For future updates, upload the new source and publish another release with a new tag, such as `v0.1.1`.
