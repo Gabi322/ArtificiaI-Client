@@ -1,6 +1,6 @@
 {
   "name": "artificiai-launcher",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "productName": "Artificiai Launcher",
   "description": "ArtificiaI Client launcher",
   "main": "main.js",
@@ -28,6 +28,12 @@
       "package.json",
       "node_modules/**/*"
     ],
+    "extraFiles": [
+      {
+        "from": "Bootstrapper/Artificiai-Launcher-Bootstrap.exe",
+        "to": "Artificiai-Launcher-Bootstrap.exe"
+      }
+    ],
     "win": {
       "icon": "assets/artificiai.ico",
       "target": [
@@ -44,8 +50,10 @@
       "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": false,
+      "runAfterFinish": false,
+      "include": "build/installer.nsh"
     },
     "publish": [
       {

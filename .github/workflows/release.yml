@@ -25,6 +25,10 @@ jobs:
       - name: Install launcher packages
         run: npm ci
 
+      - name: Build launcher bootstrapper
+        shell: pwsh
+        run: .\Bootstrapper\build.ps1
+
       - name: Build Windows launcher installer
         run: npx --yes electron-builder@26.18.0 --win nsis --x64 --publish always
 
@@ -51,6 +55,7 @@ jobs:
             'dist/Artificiai-Launcher-Setup.exe.blockmap',
             'dist/latest.yml',
             'dist/SHA256SUMS.txt',
+            'Bootstrapper/Artificiai-Launcher-Bootstrap.exe',
             'Downloader/Artificiai-Downloader.exe'
           )
           gh release upload "$env:GITHUB_REF_NAME" @assets --clobber --repo "$env:GITHUB_REPOSITORY"
