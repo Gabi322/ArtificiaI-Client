@@ -210,6 +210,36 @@ async function ensureFabricApi(mcVersion, root) {
 	return file.filename;
 }
 
+// Keep the built-in ArtificiaI profile ready to play with the client and its
+// default Fabric performance stack. Existing user-installed copies are reused.
+const AIC_REQUIRED_MODS = [
+	{ id: 'P7dR8mSH', name: 'Fabric API', file: /^fabric-api.*\.jar$/i },
+	{ id: 'AANobbMI', name: 'Sodium', file: /^sodium(?:[-_].*)?\.jar$/i },
+	{ id: 'gvQqBUqZ', name: 'Lithium', file: /^lithium(?:[-_].*)?\.jar$/i },
+	{ id: 'uXXizFIs', name: 'FerriteCore', file: /^ferritecore(?:[-_].*)?\.jar$/i }
+];
+
+async function ensureAICRequiredMods(profile) {
+	const modsDir = profileModsDir(profile);
+	fs.mkdirSync(modsDir, { recursive: true });
+	const stateFile = profileModsStateFile(profile);
+	const state = readJson(stateFile, {});
+	for (const mod of AIC_REQUIRED_MODS) {
+		const managedFile = state[mod.id];
+		if (managedFile && fs.existsSync(path.join(modsDir, managedFile))) continue;
+		if (managedFile) delete state[mod.id];
+		const existing = fs.readdirSync(modsDir).find((name) => mod.file.test(name));
+		if (existing) {
+			state[mod.id] = existing;
+			writeJson(stateFile, state);
+			continue;
+		}
+		send('status', `Installing ${mod.name} for Minecraft ${profile.mc}…`);
+		await installProject(mod.id, profile, state, new Set());
+		writeJson(stateFile, state);
+	}
+}
+
 async function login() {
 	const authManager = new Auth('select_account');
 	const xbox = await authManager.launch('electron');
@@ -312,7 +342,9 @@ ipcMain.handle('mods:search', async (_e, { query = '', profileId } = {}) => {
 });
 
 async function installProject(projectId, profile, state, seen) {
-	if (seen.has(projectId) || state[projectId]) return;
+	if (seen.has(projectId)) return;
+	if (state[projectId] && fs.existsSync(path.join(profileModsDir(profile), state[projectId]))) return;
+	if (state[projectId]) delete state[projectId];
 	seen.add(projectId);
 	const url = `https://api.modrinth.com/v2/project/${projectId}/version?loaders=${enc('["fabric"]')}&game_versions=${enc(JSON.stringify([profile.mc]))}`;
 	const versions = await getJson(url);
@@ -368,8 +400,7 @@ ipcMain.handle('play', async (_e, profileId) => {
 			version.custom = await ensureFabric(profile.mc, root);
 			if (profile.id === 'aic') {
 				syncClientJars(profile);
-				send('status', `Installing Fabric API ${profile.mc}…`);
-				await ensureFabricApi(profile.mc, root);
+				await ensureAICRequiredMods(profile);
 			} else {
 				fs.mkdirSync(profileModsDir(profile), { recursive: true });
 			}
