@@ -10,6 +10,8 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out release source
         uses: actions/checkout@v4
@@ -24,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Build Windows launcher installer
-        run: npx --yes electron-builder@26.18.0 --win nsis --x64 --publish never
+        run: npx --yes electron-builder@26.18.0 --win nsis --x64 --publish always
 
       - name: Build standalone downloader
         shell: pwsh
@@ -36,6 +38,7 @@ jobs:
           $file = 'dist/Artificiai-Launcher-Setup.exe'
           $hash = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  Artificiai-Launcher-Setup.exe" | Set-Content -LiteralPath 'dist/SHA256SUMS.txt' -Encoding ascii
+          if (-not (Test-Path -LiteralPath 'dist/latest.yml')) { throw 'electron-builder did not create dist/latest.yml; auto-update metadata is required.' }
 
       - name: Attach downloads to this release
         env:

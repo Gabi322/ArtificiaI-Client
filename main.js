@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -351,5 +352,25 @@ ipcMain.handle('play', async (_e, profileId) => {
 	}
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+	createWindow();
+	if (app.isPackaged) {
+		autoUpdater.autoDownload = true;
+		autoUpdater.autoInstallOnAppQuit = true;
+		autoUpdater.on('error', (err) => console.warn('Launcher update check failed:', err));
+		autoUpdater.on('update-downloaded', async (info) => {
+			const result = await dialog.showMessageBox(win, {
+				type: 'info',
+				title: 'ArtificiaI update ready',
+				message: `Version ${info.version} is ready to install.`,
+				detail: 'Restart the launcher now to finish updating, or choose Later to install when you next close it.',
+				buttons: ['Restart now', 'Later'],
+				defaultId: 0,
+				cancelId: 1
+			});
+			if (result.response === 0) autoUpdater.quitAndInstall();
+		});
+		setTimeout(() => autoUpdater.checkForUpdates().catch((err) => console.warn('Launcher update check failed:', err)), 5000);
+	}
+});
 app.on('window-all-closed', () => app.quit());
