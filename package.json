@@ -1,6 +1,6 @@
 {
   "name": "artificiai-launcher",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "productName": "Artificiai Launcher",
   "description": "ArtificiaI Client launcher",
   "main": "main.js",

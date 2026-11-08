@@ -159,7 +159,7 @@ async function ensureFabric(mcVersion, root) {
 
 function syncClientJars(profile) {
 	const modsDir = profileModsDir(profile);
-	fs.mkdirSync(clientDir(), { recursive: true });
+	if (!fs.existsSync(clientDir())) throw new Error('The bundled ArtificiaI client folder is missing from the launcher.');
 	fs.mkdirSync(modsDir, { recursive: true });
 	const state = readJson(clientStateFile(), { files: [] });
 	for (const file of state.files || []) {
@@ -168,6 +168,7 @@ function syncClientJars(profile) {
 	const jars = fs.readdirSync(clientDir()).filter((n) =>
 		n.endsWith('.jar') && !n.endsWith('-sources.jar') && !n.endsWith('-dev.jar')
 	);
+	if (!jars.length) throw new Error('No ArtificiaI client JAR was bundled with the launcher.');
 	for (const jar of jars) fs.copyFileSync(path.join(clientDir(), jar), path.join(modsDir, jar));
 	writeJson(clientStateFile(), { files: jars });
 	return jars.length;
@@ -387,7 +388,8 @@ ipcMain.handle('play', async (_e, profileId) => {
 		return { ok: true };
 	} catch (err) {
 		running = false;
-		return { ok: false, error: String(err?.message || err) };
+		const detail = String(err?.message || err);
+		return { ok: false, error: err?.path ? `${detail} (${err.path})` : detail };
 	}
 });
 

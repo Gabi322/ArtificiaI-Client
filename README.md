@@ -15,7 +15,7 @@ The downloader asks for the public repository as `owner/repository` and remember
 ## Publish a release
 
 1. In the repository, choose **Releases → Draft a new release**.
-2. Match the release tag to the app version in `package.json` (for example, `v0.1.6` for version `0.1.6`), enter a title, and publish the release.
+2. Match the release tag to the app version in `package.json` (for example, `v0.1.7` for version `0.1.7`), enter a title, and publish the release.
 3. GitHub Actions builds the launcher and bootstrapper, then attaches `latest.yml` plus the Windows blockmap required for launcher updates, along with the bootstrapper, downloader, and `SHA256SUMS.txt`.
 4. When the workflow completes, share `Artificiai-Launcher-Setup.exe` with friends who want to install directly. `Artificiai-Downloader.exe` is an optional helper that fetches the latest installer and verifies its SHA-256 checksum.
 
@@ -29,6 +29,6 @@ The built-in ArtificiaI Client profile uses Fabric. On first play it copies the 
 
 The first release may show no assets while the workflow is building. Refresh the release page after the **Build launcher and downloader** workflow finishes.
 
-For future updates, upload the new source and publish another release with a new tag, such as `v0.1.7`.
+For future updates, upload the new source and publish another release with a new tag, such as `v0.1.8`.
 
 The downloader is a small Windows app built with the .NET Framework C# compiler. It requires Windows 10/11 with .NET Framework 4.8 or newer. The setup EXE bundles the Electron runtime and launcher packages.
